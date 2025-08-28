@@ -1,0 +1,87 @@
+{
+  "name": "quantnexus-trading-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for ML Trading System - Stock Market Analysis & Trading",
+  "author": "QuantNexus",
+  "license": "MIT",
+  
+  "server": {
+    "command": "python",
+    "args": ["-m", "mcp_server.trading_server"],
+    "env": {
+      "PYTHONPATH": "${workspaceFolder}",
+      "MCP_MODE": "production"
+    }
+  },
+  
+  "capabilities": {
+    "tools": {
+      "enabled": true,
+      "categories": [
+        "market_analysis",
+        "trading_execution",
+        "portfolio_management",
+        "ml_models",
+        "risk_management",
+        "backtesting"
+      ]
+    },
+    "resources": {
+      "enabled": true,
+      "types": [
+        "market_data",
+        "portfolio_state",
+        "model_metrics",
+        "trading_signals"
+      ]
+    },
+    "prompts": {
+      "enabled": true,
+      "templates": [
+        "analyze_stock",
+        "execute_trade",
+        "train_model",
+        "backtest_strategy"
+      ]
+    }
+  },
+  
+  "settings": {
+    "cache": {
+      "enabled": true,
+      "ttl": 300,
+      "max_size": "1GB"
+    },
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 60,
+      "burst": 100
+    },
+    "security": {
+      "authentication": true,
+      "encryption": true,
+      "api_key_required": true
+    }
+  },
+  
+  "integrations": {
+    "alpaca": {
+      "enabled": true,
+      "paper_trading": true,
+      "websocket": true
+    },
+    "database": {
+      "type": "postgresql",
+      "timescale": true,
+      "connection_pool": 10
+    },
+    "redis": {
+      "enabled": true,
+      "use_for": ["cache", "pubsub", "ml_features"]
+    },
+    "jupyter": {
+      "enabled": true,
+      "kernel": "python3"
+    }
+  }
+}

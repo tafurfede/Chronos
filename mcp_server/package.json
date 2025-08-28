@@ -1,0 +1,149 @@
+{
+  "name": "quantnexus-trading-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for ML Trading System",
+  "main": "trading_server.py",
+  "scripts": {
+    "start": "python -m mcp_server.trading_server",
+    "dev": "MCP_MODE=development python -m mcp_server.trading_server",
+    "test": "pytest tests/test_mcp_server.py",
+    "build": "python setup.py build"
+  },
+  "mcp": {
+    "server": {
+      "command": "python",
+      "args": ["-m", "mcp_server.trading_server"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    "tools": [
+      {
+        "name": "analyze_stock",
+        "description": "Analyze a stock with ML models and technical indicators",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "symbol": {"type": "string"},
+            "period": {"type": "string", "default": "1d"}
+          },
+          "required": ["symbol"]
+        }
+      },
+      {
+        "name": "get_market_signals",
+        "description": "Get high-confidence trading signals",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "min_confidence": {"type": "number", "default": 0.65}
+          }
+        }
+      },
+      {
+        "name": "execute_trade",
+        "description": "Execute a trade with ML-optimized parameters",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "symbol": {"type": "string"},
+            "action": {"type": "string", "enum": ["buy", "sell"]},
+            "quantity": {"type": "integer", "default": 0},
+            "order_type": {"type": "string", "default": "market"},
+            "limit_price": {"type": "number", "optional": true}
+          },
+          "required": ["symbol", "action"]
+        }
+      },
+      {
+        "name": "close_position",
+        "description": "Close an existing position",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "symbol": {"type": "string"},
+            "reason": {"type": "string", "default": "manual"}
+          },
+          "required": ["symbol"]
+        }
+      },
+      {
+        "name": "get_portfolio_status",
+        "description": "Get current portfolio status and positions"
+      },
+      {
+        "name": "calculate_risk_metrics",
+        "description": "Calculate portfolio risk metrics"
+      },
+      {
+        "name": "train_models",
+        "description": "Train ML models with historical data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "optional": true
+            }
+          }
+        }
+      },
+      {
+        "name": "get_model_performance",
+        "description": "Get ML model performance metrics"
+      },
+      {
+        "name": "run_backtest",
+        "description": "Run backtest on historical data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "start_date": {"type": "string"},
+            "end_date": {"type": "string"},
+            "initial_capital": {"type": "number", "default": 10000}
+          },
+          "required": ["start_date", "end_date"]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "uri": "market_data/{symbol}",
+        "description": "Real-time market data for a symbol",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "portfolio/state",
+        "description": "Current portfolio state",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "signals/latest",
+        "description": "Latest trading signals",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "models/metrics",
+        "description": "ML model performance metrics",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "analyze_stock",
+        "description": "Analyze a stock with ML models",
+        "arguments": ["symbol"]
+      },
+      {
+        "name": "execute_trade",
+        "description": "Execute a trade",
+        "arguments": ["symbol", "action"]
+      },
+      {
+        "name": "daily_trading",
+        "description": "Execute daily trading workflow"
+      }
+    ]
+  }
+}

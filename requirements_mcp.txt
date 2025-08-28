@@ -1,0 +1,26 @@
+# Essential packages for MCP Trading System
+# Compatible with Python 3.13
+
+# Core libraries
+numpy
+pandas
+scikit-learn
+
+# ML Models (simplified)
+xgboost
+lightgbm
+
+# Trading
+yfinance
+alpaca-py
+
+# Web/API
+fastapi
+uvicorn
+websockets
+aiohttp
+
+# Utilities
+python-dotenv
+pyyaml
+joblib

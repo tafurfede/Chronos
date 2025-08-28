@@ -1,0 +1,263 @@
+# ML Trading System Configuration
+
+# Trading Strategy Settings
+strategy:
+  name: "ML Ensemble Strategy"
+  version: "1.0.0"
+  
+  # Universe Selection
+  universe:
+    stocks:
+      - AAPL
+      - MSFT
+      - GOOGL
+      - AMZN
+      - META
+      - NVDA
+      - TSLA
+      - JPM
+      - V
+      - JNJ
+      - WMT
+      - PG
+      - MA
+      - UNH
+      - DIS
+      - PYPL
+      - NFLX
+      - ADBE
+      - CRM
+      - PFE
+    
+    # Selection criteria
+    min_volume: 1000000
+    min_price: 10
+    max_price: 5000
+    
+  # Signal Generation
+  signals:
+    min_confidence: 0.65
+    min_expected_return: 0.002
+    max_signals_per_day: 50
+    signal_timeout: 3600  # seconds
+    
+  # Position Management
+  positions:
+    max_positions: 20
+    position_size_pct: 0.05
+    max_position_size: 0.10
+    min_position_size: 0.01
+    use_kelly_sizing: true
+    kelly_fraction: 0.25
+    
+  # Risk Management
+  risk:
+    stop_loss_pct: 0.015
+    profit_target_pct: 0.03
+    trailing_stop_pct: 0.02
+    max_daily_loss: 0.05
+    max_weekly_loss: 0.10
+    max_drawdown: 0.15
+    
+# ML Model Configuration
+models:
+  ensemble:
+    models:
+      - xgboost
+      - lightgbm
+      - neural_network
+      - lstm
+    
+    weights:
+      xgboost: 0.25
+      lightgbm: 0.25
+      neural_network: 0.25
+      lstm: 0.25
+    
+    voting: "soft"
+    
+  xgboost:
+    n_estimators: 1000
+    max_depth: 6
+    learning_rate: 0.01
+    subsample: 0.8
+    colsample_bytree: 0.8
+    
+  lightgbm:
+    n_estimators: 1000
+    max_depth: 6
+    learning_rate: 0.01
+    num_leaves: 31
+    subsample: 0.8
+    
+  neural_network:
+    layers:
+      - units: 512
+        activation: relu
+        dropout: 0.3
+      - units: 256
+        activation: relu
+        dropout: 0.3
+      - units: 128
+        activation: relu
+        dropout: 0.2
+      - units: 64
+        activation: relu
+      - units: 32
+        activation: relu
+      - units: 1
+    
+    optimizer: adam
+    learning_rate: 0.001
+    loss: huber
+    epochs: 200
+    batch_size: 32
+    
+  lstm:
+    sequence_length: 60
+    layers:
+      - units: 128
+        return_sequences: true
+        dropout: 0.2
+      - units: 64
+        return_sequences: true
+        dropout: 0.2
+      - units: 32
+        dropout: 0.2
+    
+    dense_layers:
+      - units: 16
+      - units: 1
+    
+    optimizer: adam
+    learning_rate: 0.001
+    
+# Feature Engineering
+features:
+  # Price features
+  price:
+    returns: [1, 2, 3, 5, 10, 20, 30, 60]
+    moving_averages: [5, 10, 20, 50, 100, 200]
+    price_channels: [20, 50, 252]
+    
+  # Volume features
+  volume:
+    volume_ma: [5, 10, 20, 50]
+    volume_ratio: [5, 10, 20, 50]
+    obv: true
+    vwap: true
+    
+  # Technical indicators
+  technical:
+    rsi: [14, 30, 50]
+    macd: true
+    bollinger_bands: [20, 50]
+    stochastic: [14, 30]
+    atr: [14, 30]
+    adx: true
+    ichimoku: true
+    
+  # Microstructure
+  microstructure:
+    spread: true
+    order_imbalance: true
+    volume_profile: true
+    
+  # Volatility
+  volatility:
+    historical: [5, 10, 20, 60]
+    parkinson: true
+    garman_klass: true
+    
+# Data Configuration
+data:
+  # Historical data
+  history_days: 730
+  warmup_period: 100
+  
+  # Real-time data
+  update_frequency: 1  # seconds
+  data_quality_check: true
+  
+  # Storage
+  cache_size: 1000
+  compression: true
+  
+# Execution Configuration
+execution:
+  # Order types
+  order_types:
+    - market
+    - limit
+    - stop
+    - trailing_stop
+    
+  # Smart routing
+  smart_routing: true
+  
+  # Slippage model
+  slippage:
+    model: "linear"
+    base_slippage: 0.001
+    impact_coefficient: 0.0001
+    
+  # Commission
+  commission:
+    model: "per_share"
+    rate: 0.005
+    minimum: 1.0
+    
+# Backtesting Configuration
+backtesting:
+  # Time period
+  start_date: "2022-01-01"
+  end_date: "2023-12-31"
+  
+  # Initial capital
+  initial_capital: 10000
+  
+  # Realistic assumptions
+  fill_at_last: false
+  check_liquidity: true
+  
+  # Performance metrics
+  calculate_sharpe: true
+  calculate_sortino: true
+  calculate_calmar: true
+  
+# Monitoring Configuration
+monitoring:
+  # Metrics to track
+  metrics:
+    - win_rate
+    - sharpe_ratio
+    - max_drawdown
+    - daily_pnl
+    - position_count
+    - model_confidence
+    
+  # Alerts
+  alerts:
+    max_drawdown_alert: 0.10
+    min_win_rate_alert: 0.60
+    position_limit_alert: 18
+    
+  # Reporting
+  daily_report: true
+  weekly_report: true
+  monthly_report: true
+  
+# System Configuration
+system:
+  # Logging
+  log_level: INFO
+  log_file: logs/trading.log
+  
+  # Performance
+  parallel_processing: true
+  num_workers: 4
+  
+  # Fail-safes
+  circuit_breaker: true
+  max_daily_trades: 100
+  emergency_stop: true
