@@ -1,0 +1,55 @@
+# Prometheus Configuration for QuantNexus ML Trading System
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'quantnexus-monitor'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - localhost:9093
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - "alerts/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Trading System Metrics
+  - job_name: 'trading-system'
+    static_configs:
+      - targets: ['localhost:8000']
+        labels:
+          service: 'trading'
+          component: 'main'
+    metrics_path: /metrics
+    scrape_interval: 10s
+
+  # Database Metrics (if using postgres_exporter)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['localhost:9187']
+        labels:
+          service: 'database'
+          database: 'quantnexus'
+
+  # Node Exporter for System Metrics
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          service: 'system'
+
+  # Alpaca API Health
+  - job_name: 'alpaca-api'
+    metrics_path: /health
+    static_configs:
+      - targets: ['api.alpaca.markets:443']
+        labels:
+          service: 'alpaca'
+    scrape_interval: 60s

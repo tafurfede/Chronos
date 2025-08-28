@@ -1,0 +1,10 @@
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:54:04.303220", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:54:18.818486", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:54:43.116467", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:54:57.920986", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:56:08.191583", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:56:39.613010", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:57:06.786943", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:57:25.250570", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 165}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T04:57:51.912716", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 166}
+{"message": "Test log message", "taskName": null, "timestamp": "2025-08-28T05:10:36.803410", "level": "INFO", "logger": "test", "module": "test_phase1_integration", "function": "test_logging", "line": 166}

@@ -1,0 +1,161 @@
+groups:
+  - name: trading_alerts
+    interval: 30s
+    rules:
+      # Circuit Breaker Alerts
+      - alert: CircuitBreakerTripped
+        expr: circuit_breaker_state > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Circuit breaker {{ $labels.breaker_type }} is OPEN"
+          description: "Trading circuit breaker {{ $labels.breaker_type }} has been tripped and trading is halted"
+
+      # Portfolio Risk Alerts
+      - alert: DailyLossLimitApproaching
+        expr: abs(daily_pnl_dollars) > (portfolio_value_dollars * 0.04)
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Daily loss approaching limit"
+          description: "Daily P&L is at {{ $value }} ({{ $value | humanizePercentage }} of portfolio)"
+
+      - alert: DailyLossLimitExceeded
+        expr: abs(daily_pnl_dollars) > (portfolio_value_dollars * 0.05)
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Daily loss limit EXCEEDED"
+          description: "Daily loss of {{ $value }} exceeds 5% limit - trading should be halted"
+
+      # Position Concentration
+      - alert: HighPositionConcentration
+        expr: (positions_count / 1) > 15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of open positions"
+          description: "Currently holding {{ $value }} positions - consider reducing exposure"
+
+      # System Health Alerts
+      - alert: LowSystemHealth
+        expr: system_health_score < 70
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "System health degraded"
+          description: "System health score is {{ $value }}/100"
+
+      - alert: CriticalSystemHealth
+        expr: system_health_score < 50
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "System health CRITICAL"
+          description: "System health score is {{ $value }}/100 - immediate attention required"
+
+      # Database Connection Issues
+      - alert: HighDatabaseConnections
+        expr: database_connections_active > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database connection count"
+          description: "{{ $value }} active database connections (limit approaching)"
+
+      # Memory Usage
+      - alert: HighMemoryUsage
+        expr: memory_usage_megabytes > 8000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage at {{ $value }}MB"
+
+      # Model Performance
+      - alert: LowModelAccuracy
+        expr: model_accuracy_percentage < 60
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Model accuracy below threshold"
+          description: "Model {{ $labels.model_name }} accuracy is {{ $value }}%"
+
+      # Trading Frequency
+      - alert: HighTradingFrequency
+        expr: rate(trades_total[1m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Unusually high trading frequency"
+          description: "Trading at {{ $value }} trades per minute"
+
+      # API Errors
+      - alert: HighAPIErrorRate
+        expr: rate(api_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API error rate"
+          description: "API endpoint {{ $labels.endpoint }} has {{ $value | humanizePercentage }} error rate"
+
+      # Data Pipeline Issues
+      - alert: DataPipelineErrors
+        expr: rate(data_pipeline_errors_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Data pipeline errors detected"
+          description: "Data pipeline {{ $labels.data_source }} is experiencing errors"
+
+      # Value at Risk
+      - alert: HighValueAtRisk
+        expr: abs(value_at_risk_95) > (portfolio_value_dollars * 0.10)
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Value at Risk"
+          description: "95% VaR is {{ $value }} ({{ $value | humanizePercentage }} of portfolio)"
+
+      # Sharpe Ratio
+      - alert: LowSharpeRatio
+        expr: sharpe_ratio < 0.5
+        for: 1h
+        labels:
+          severity: info
+        annotations:
+          summary: "Low Sharpe ratio"
+          description: "Sharpe ratio is {{ $value }} - consider strategy adjustments"
+
+      # Win Rate
+      - alert: LowWinRate
+        expr: win_rate_percentage < 45
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low win rate"
+          description: "Win rate is {{ $value }}% - review trading strategy"
+
+      # Cash Balance
+      - alert: LowCashBalance
+        expr: cash_balance_dollars < 10000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cash balance"
+          description: "Cash balance is ${{ $value }} - may impact trading ability"

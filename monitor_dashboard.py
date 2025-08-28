@@ -180,8 +180,8 @@ Recent Trades:
             activity_panel
         )
         
-        layout["center"] = positions_panel
-        layout["bottom"] = performance_panel
+        layout["middle"]["center"].update(positions_panel)
+        layout["bottom"].update(performance_panel)
         
         return layout
     
